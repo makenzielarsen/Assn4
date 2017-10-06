@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -11,6 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 /**
  *
@@ -80,25 +83,17 @@ public class MultiImageView extends Application {
 
 
     public void pressedAdd() {
-        HBox inputBox = new HBox();
-        HBox inputBox2 = new HBox();
-        Button enterButton = new Button("Enter");
-        Button cancelButton = new Button("Cancel");
-        TextField textField = new TextField();
-        enterButton.setOnAction(e -> pressedEnter(textField));
-        Text urlInputText = new Text("Enter the url of the image: ");
-        Text titleInputText = new Text("Enter the image title: ");
-        inputBox.getChildren().addAll(urlInputText, textField, enterButton, cancelButton);
-
-        textField.setText("");
-
-        inputBox2.getChildren().addAll(titleInputText, textField, enterButton, cancelButton);
+        TextInputDialog getUrl = new TextInputDialog();
+        getUrl.setContentText("Enter an image URL:");
+        Optional<String> urlResult = getUrl.showAndWait();
+        TextInputDialog getTitle = new TextInputDialog();
+        getTitle.setContentText("Enter an image title:");
+        Optional<String> titleResult = getTitle.showAndWait();
+        if (urlResult.isPresent() && titleResult.isPresent()) {
+            imageController.insertNewImage(urlResult.get(), titleResult.get());
+        }
 
         updateCurrentImage();
-    }
-
-    public String pressedEnter(TextField textField) {
-        return textField.getText();
     }
 
     public void pressedDelete() {
@@ -128,6 +123,6 @@ public class MultiImageView extends Application {
 
     @Override
     public void stop(){
-        //imageController.saveToFile();
+        imageController.saveToFile();
     }
 }

@@ -34,6 +34,7 @@ public class ImageController {
             for (ImageModel imageModel: images) {
                 bufferedWriter.write(imageModel.getUrl() + " " + imageModel.getTitle() + "\n");
             }
+            bufferedWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,20 +58,20 @@ public class ImageController {
 
     public void deleteCurrentImage() {
         images.remove(currentIndex);
-        if (currentIndex == images.size() - 1 && currentIndex != 0) {
+        if (currentIndex >= images.size() - 1 && currentIndex != 0) {
             currentIndex -= 1;
         }
     }
 
     public void insertNewImage(String url, String title) {
         ImageModel imageModel = new ImageModel(url, title);
-        if (currentIndex >= images.size()) {
+        if (!hasNextImage()) {
             images.add(imageModel);
-            nextImage();
         } else {
-            nextImage();
-            images.add(currentIndex, imageModel);
+            images.add(currentIndex + 1, imageModel);
         }
+        nextImage();
+
     }
 
     public boolean hasPreviousImage() {
