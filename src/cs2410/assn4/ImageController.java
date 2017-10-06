@@ -43,6 +43,8 @@ public class ImageController {
     public void nextImage() {
         if(hasNextImage()) {
             currentIndex += 1;
+        } else {
+            currentIndex = 0;
         }
     }
 
@@ -53,6 +55,8 @@ public class ImageController {
     public void previousImage() {
         if (hasPreviousImage()) {
             currentIndex -= 1;
+        } else {
+            currentIndex = images.size() - 1;
         }
     }
 
@@ -74,11 +78,11 @@ public class ImageController {
 
     }
 
-    public boolean hasPreviousImage() {
+    private boolean hasPreviousImage() {
         return currentIndex > 0;
     }
 
-    public boolean hasNextImage() {
+    private boolean hasNextImage() {
         return currentIndex < images.size() - 1;
     }
 

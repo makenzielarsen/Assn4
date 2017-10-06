@@ -38,8 +38,6 @@ public class MultiImageView extends Application {
         BorderPane rootPane = new BorderPane();
 
         HBox imagePane = new HBox();
-        imageTitle.setText(imageController.getCurrentImage().getTitle());
-
         imageView = new javafx.scene.image.ImageView();
 
         imageView.setPreserveRatio(true);
@@ -85,9 +83,16 @@ public class MultiImageView extends Application {
     public void pressedAdd() {
         TextInputDialog getUrl = new TextInputDialog();
         getUrl.setContentText("Enter an image URL:");
+        getUrl.setHeaderText(null);
+        getUrl.setTitle("Add new image");
         Optional<String> urlResult = getUrl.showAndWait();
+        if (!urlResult.isPresent()) {
+            return;
+        }
         TextInputDialog getTitle = new TextInputDialog();
         getTitle.setContentText("Enter an image title:");
+        getTitle.setHeaderText(null);
+        getTitle.setTitle("Add new image");
         Optional<String> titleResult = getTitle.showAndWait();
         if (urlResult.isPresent() && titleResult.isPresent()) {
             imageController.insertNewImage(urlResult.get(), titleResult.get());
@@ -114,11 +119,11 @@ public class MultiImageView extends Application {
             imageTitle.setText(model.getTitle());
         } else {
             imageView.setImage(null);
-            imageTitle.setText("");
+            imageTitle.setText("No Image Found");
         }
-        previousButton.setDisable(!imageController.hasPreviousImage());
-        nextButton.setDisable(!imageController.hasNextImage());
         deleteButton.setDisable(!imageController.hasCurrentImage());
+        nextButton.setDisable(!imageController.hasCurrentImage());
+        previousButton.setDisable(!imageController.hasCurrentImage());
     }
 
     @Override
