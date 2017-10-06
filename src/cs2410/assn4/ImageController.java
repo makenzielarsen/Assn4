@@ -78,11 +78,11 @@ public class ImageController {
 
     }
 
-    private boolean hasPreviousImage() {
+    public boolean hasPreviousImage() {
         return currentIndex > 0;
     }
 
-    private boolean hasNextImage() {
+    public boolean hasNextImage() {
         return currentIndex < images.size() - 1;
     }
 

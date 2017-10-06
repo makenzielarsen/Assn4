@@ -1,9 +1,10 @@
 package cs2410.assn4;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -42,8 +43,8 @@ public class MultiImageView extends Application {
 
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
-        imageView.setFitHeight(300);
-        imageView.setFitWidth(300);
+        imageView.setFitHeight(400);
+        imageView.setFitWidth(400);
 
         imagePane.getChildren().add(imageView);
 
@@ -55,17 +56,20 @@ public class MultiImageView extends Application {
         nextButton.setOnAction(e -> pressedNext());
 
         HBox buttons = new HBox(previousButton, deleteButton, addButton, nextButton);
-        buttons.setSpacing(5);
+        buttons.setSpacing(10);
 
         bottomPane.getChildren().add(buttons);
-        bottomPane.setMinWidth(500);
-        bottomPane.setMinHeight(500);
 
         rootPane.setTop(imageTitle);
+        BorderPane.setAlignment(imageTitle, Pos.CENTER);
 
         rootPane.setCenter(imagePane);
+        BorderPane.setMargin(imagePane, new Insets(12, 12, 12, 12));
 
         rootPane.setBottom(bottomPane);
+
+        rootPane.setMinSize(500, 400);
+
         Scene scene1 = new Scene(rootPane);
 
         primaryStage.setScene(scene1);
@@ -118,12 +122,18 @@ public class MultiImageView extends Application {
             imageView.setImage(image);
             imageTitle.setText(model.getTitle());
         } else {
-            imageView.setImage(null);
-            imageTitle.setText("No Image Found");
+            Image image = new Image("https://upload.wikimedia.org/wikipedia/commons/7/75/No_image_available.png");
+            imageView.setImage(image);
         }
-        deleteButton.setDisable(!imageController.hasCurrentImage());
-        nextButton.setDisable(!imageController.hasCurrentImage());
-        previousButton.setDisable(!imageController.hasCurrentImage());
+        if (!imageController.hasNextImage() && !imageController.hasPreviousImage()) {
+            deleteButton.setDisable(!imageController.hasCurrentImage());
+            nextButton.setDisable(!imageController.hasCurrentImage() || !imageController.hasNextImage());
+            previousButton.setDisable(!imageController.hasCurrentImage() || !imageController.hasPreviousImage());
+        } else {
+            deleteButton.setDisable(!imageController.hasCurrentImage());
+            nextButton.setDisable(!imageController.hasCurrentImage());
+            previousButton.setDisable(!imageController.hasCurrentImage());
+        }
     }
 
     @Override
